@@ -43,6 +43,9 @@ class FOSFacebookExtension extends Extension
         foreach (array('file', 'app_id', 'secret', 'cookie', 'domain', 'logging', 'culture', 'permissions') as $attribute) {
             $container->setParameter('fos_facebook.'.$attribute, $config[$attribute]);
         }
+        
+        $container->setParameter('fos_facebook.channel.url', $config['channel']['url']);
+        $container->setParameter('fos_facebook.channel.expire', $config['channel']['expire']);
     }
 
     /**

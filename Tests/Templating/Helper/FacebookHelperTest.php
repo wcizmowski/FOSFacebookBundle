@@ -37,16 +37,33 @@ class FacebookHelperTest extends \PHPUnit_Framework_TestCase
                 'logging' => true,
                 'oauth' => true,
                 'status'  => false,
+                'channelUrl' => '/channel.html',
                 'xfbml'   => false,
             ))
             ->will($this->returnValue($expected));
 
+        $context = $this->getMockBuilder('Symfony\Component\Routing\RequestContext')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context
+            ->expects($this->once())
+            ->method('getHost')
+            ->will($this->returnValue(''));
+
+        $routing = $this->getMockBuilder('Symfony\Component\Routing\Router')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $routing
+            ->expects($this->once())
+            ->method('getContext')
+            ->will($this->returnValue($context));
+        
         $facebookMock = $this->getMock('\BaseFacebook', array('getAppId'));
         $facebookMock->expects($this->once())
             ->method('getAppId')
             ->will($this->returnValue('123'));
 
-        $helper = new FacebookHelper($templating, $facebookMock);
+        $helper = new FacebookHelper($templating, $facebookMock, $routing);
         $this->assertSame($expected, $helper->initialize(array('cookie' => false)));
     }
 
@@ -69,12 +86,12 @@ class FacebookHelperTest extends \PHPUnit_Framework_TestCase
                 'scope'          => '1,2,3',
             ))
             ->will($this->returnValue($expected));
-
+        
         $facebookMock = $this->getMock('\BaseFacebook', array('getAppId'));
         $facebookMock->expects($this->any())
             ->method('getAppId');
 
-        $helper = new FacebookHelper($templating, $facebookMock, true, 'en_US', array(1,2,3) );
+        $helper = new FacebookHelper($templating, $facebookMock, null, true, 'en_US', array(1,2,3) );
         $this->assertSame($expected, $helper->loginButton(array('label' => 'testLabel')));
     }
 }
