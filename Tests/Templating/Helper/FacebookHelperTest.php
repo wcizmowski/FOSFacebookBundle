@@ -42,14 +42,14 @@ class FacebookHelperTest extends \PHPUnit_Framework_TestCase
             ))
             ->will($this->returnValue($expected));
 
-        $routing = $this->getMockBuilder('Symfony\Component\Routing\Router')
+        $routing = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGenerator')
             ->disableOriginalConstructor()
             ->getMock();
         $routing
             ->expects($this->once())
             ->method('generate')
             ->will($this->returnValue('/channel.html'));
-        
+
         $facebookMock = $this->getMock('\BaseFacebook', array('getAppId'));
         $facebookMock->expects($this->once())
             ->method('getAppId')
@@ -78,12 +78,16 @@ class FacebookHelperTest extends \PHPUnit_Framework_TestCase
                 'scope'          => '1,2,3',
             ))
             ->will($this->returnValue($expected));
-        
+
+        $routing = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGenerator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $facebookMock = $this->getMock('\BaseFacebook', array('getAppId'));
         $facebookMock->expects($this->any())
             ->method('getAppId');
 
-        $helper = new FacebookHelper($templating, $facebookMock, null, true, 'en_US', array(1,2,3) );
+        $helper = new FacebookHelper($templating, $facebookMock, $routing, true, 'en_US', array(1,2,3) );
         $this->assertSame($expected, $helper->loginButton(array('label' => 'testLabel')));
     }
 }
