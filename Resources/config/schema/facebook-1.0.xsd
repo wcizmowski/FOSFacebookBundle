@@ -29,7 +29,6 @@
     </xsd:complexType>
 
     <xsd:complexType name="channel">
-        <xsd:attribute name="url" type="xsd:string" />
         <xsd:attribute name="expire" type="xsd:integer" />
     </xsd:complexType>
 </xsd:schema>
