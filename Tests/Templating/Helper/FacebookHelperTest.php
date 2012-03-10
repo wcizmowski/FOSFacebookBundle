@@ -79,7 +79,7 @@ class FacebookHelperTest extends \PHPUnit_Framework_TestCase
             ))
             ->will($this->returnValue($expected));
 
-        $routing = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGenerator')
+        $routing = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
